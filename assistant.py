@@ -14,8 +14,7 @@ import json
 
 class Assistant:
     NEGATIVE_ANSWER = "Не удалось найти ответ в предоставленном источнике."
-    PROMPT_TEMPLATE = f"""
-Ты помощник для ответов на вопросы.
+    PROMPT_TEMPLATE = f"""Ты помощник для ответов на вопросы.
 Не придумывай ответ. Если не знаешь ответа, просто скажи: «{NEGATIVE_ANSWER}»
 Отвечай на вопрос, основываясь только на следующем контексте:
 
@@ -23,8 +22,8 @@ class Assistant:
 
 ---
 
-Ответь на вопрос, исходя из приведенного выше контекста: {{question}}
-"""
+Ответь на вопрос, исходя из приведенного выше контекста: {{question}}"""
+    
     def __init__(self, chroma_path="chroma", log_dir="logs"):
         openai.api_key = os.environ['OPENAI_API_KEY']
         embedding_function = OpenAIEmbeddings(model="text-embedding-3-large")
