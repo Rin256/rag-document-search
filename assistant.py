@@ -14,15 +14,14 @@ import json
 
 class Assistant:
     NEGATIVE_ANSWER = "Не удалось найти ответ в предоставленном источнике."
-    PROMPT_TEMPLATE = f"""Ты помощник для ответов на вопросы.
-Не придумывай ответ. Если не знаешь ответа, просто скажи: «{NEGATIVE_ANSWER}»
-Отвечай на вопрос, основываясь только на следующем контексте:
+    PROMPT_TEMPLATE = f"""Ответь на вопрос, основываясь только на следующем контексте:
 
 {{context}}
 
 ---
 
-Ответь на вопрос, исходя из приведенного выше контекста: {{question}}"""
+Ответь на вопрос, исходя из приведенного выше контекста: {{question}}
+Если контекст не содержит ответа, просто скажи: «{NEGATIVE_ANSWER}»"""
     
     def __init__(self, chroma_path="chroma", log_dir="logs"):
         openai.api_key = os.environ['OPENAI_API_KEY']
@@ -35,7 +34,7 @@ class Assistant:
     def generate(self, question):
         # Основная логика для поиска в базе данных и генерации ответа
         chunks = self.search_database(question)
-        responses = []
+        responses = [question]
 
         # Генерация ответа по схожести
         formatted_similarity_response = self.format_similarity_response(chunks)
@@ -49,7 +48,7 @@ class Assistant:
             if formatted_gpt_response:
                 responses.append(formatted_gpt_response)
 
-        if len(responses) == 1:
+        if len(responses) == 2:
            responses.append("Не удалось найти ответ в предоставленных источниках.")
         
         general_response = "\n__\n\n".join(responses)
