@@ -48,6 +48,9 @@ class Assistant:
             formatted_gpt_response = self.format_gpt_response(response, chunk)
             if formatted_gpt_response:
                 responses.append(formatted_gpt_response)
+
+        if len(responses) == 1:
+           responses.append("Не удалось найти ответ в предоставленных источниках.")
         
         general_response = "\n__\n\n".join(responses)
         print(general_response)
